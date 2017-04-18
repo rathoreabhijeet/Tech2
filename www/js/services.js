@@ -57,7 +57,7 @@ angular.module('starter.services', [])
          }
     })
     .factory('YoutubeFeeds',function () {
-        return { data: [] };
+        return { data: [],feeds: [] };
     })
     .factory('MyServices', function ($http, $filter, $q, RSS2JSON) {
         return {

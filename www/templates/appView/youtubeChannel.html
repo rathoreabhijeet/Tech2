@@ -22,9 +22,9 @@
             <ion-slide ng-repeat="bloglist in blogs">
                 <ion-list ng-if="showList">
                     <ion-item class="category-ion-item"
-                              ng-repeat="blog in bloglist" ng-click="goToRssArticle($index)">
+                              ng-repeat="video in videos" ng-click="goToRssArticle($index)">
                         <div class="row row-no-padding row-wrap category-items">
-                            <div cache-src="{{blog.imageLink}}"
+                            <div cache-src="{{video.imageLink}}"
                                  src-is="background"
                                  background-loading-style=" no-repeat center 30%"
                                  class="category-item-image col col-33 lightgray-bg">

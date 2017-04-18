@@ -315,7 +315,7 @@ angular.module('starter')
                 }
             })
             .state('app.youtubeChannel', {
-                url: '/youtubeChannel',
+                url: '/youtubeChannel/:channel/:index',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/appView/youtubeChannel.html',

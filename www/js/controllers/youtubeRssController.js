@@ -11,7 +11,6 @@ angular.module('starter')
         $scope.RSSCat = { 'height': devWidth / 2 + 'px' }
         $scope.youtubeRss = YoutubeFeeds.data;
 
-
         function fetchRssData() {
             $ionicLoading.show();
             YoutubeRss.getAllFeeds(function (data) {
@@ -40,6 +39,10 @@ angular.module('starter')
         $scope.refreshRss = function () {
             YoutubeFeeds.data.length = 0;
             init();
+        }
+
+        $scope.goToRssSingle = function(channel,index){
+            $state.go('app.youtubeChannel',{channel:channel,index:index})
         }
 
         init();

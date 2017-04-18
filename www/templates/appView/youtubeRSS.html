@@ -29,7 +29,7 @@
                 <ion-item class="col col-50 margin-0 no-border">
                     <div class="row row-no-padding margin-0" ng-repeat="channel in youtubeRss" ng-if="$index%2==0">
                         <div class="col">
-                            <div class="item-image new-loader" ng-style="RSSCat" ng-click="goToRssSingle(cat.name,cat.title)">
+                            <div class="item-image new-loader" ng-style="RSSCat" ng-click="goToRssSingle(channel,$index)">
                                 <img class="full-image" alt="" cache-src="{{channel.channel_image}}" circle-container-style="display:none">
                                 <h3 class="RSS-category cutive text-large  text-wrap light">{{channel.channel_title|capitalize}}</h3>
                             </div>
@@ -39,7 +39,7 @@
                 <ion-item class="col col-50 margin-0 no-border">
                     <div class="row row-no-padding margin-0" ng-repeat="channel in youtubeRss" ng-if="$index%2!=0">
                         <div class="col">
-                            <div class="item-image new-loader" ng-style="RSSCat" ng-click="goToRssSingle(cat.name,cat.title)">
+                            <div class="item-image new-loader" ng-style="RSSCat" ng-click="goToRssSingle(channel,$index)">
                                 <img class="full-image" alt="" cache-src="{{channel.channel_image}}" circle-container-style="display:none">
                                 <h3 class="RSS-category cutive text-large  text-wrap light">{{channel.channel_title|capitalize}}</h3>
                             </div>

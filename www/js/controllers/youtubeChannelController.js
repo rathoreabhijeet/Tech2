@@ -217,7 +217,13 @@ angular.module('starter')
         };
 
         $scope.lockSlide = function () {
-            $scope.fetchVideoData();
+            if(YoutubeFeeds.data[$stateParams.index].feeds.length){
+                $scope.videos = YoutubeFeeds.data[$stateParams.index].feeds;
+            }
+            else{
+                $scope.fetchVideoData();
+            }
+            
             // console.log('lockslide');
             // // Initialize slide-box with number of slides
             // _.each(RSS.data, function () {
@@ -316,6 +322,7 @@ angular.module('starter')
             // YoutubeFeeds.data = [];
             YoutubeRss.getAllFeeds(function (data) {
                 console.log(data);
+                $scope.videos = YoutubeFeeds.data[$stateParams.index].feeds;
             }, function (err) {
                 $state.go('access.offline');
             })
