@@ -25,7 +25,7 @@
     <ion-content delegate-handle="article">
         <ion-item class="padding-0">
             <div class="item-image min-h-250 "
-                 ng-style="{'background-image': 'url(' + article.imageLink + ')'}">
+                 ng-style="{'background-image': 'url(' + article.image_url + ')'}">
                 <!--<img cache-src="{{article.image}}">-->
                 <div class="titles">
                     <h1 class="playfair">{{article.title}}</h1>
@@ -34,9 +34,9 @@
             </div>
             <div class="item-content">
                 <div class="row">
-                    <div class="col bold italic"><i class="icon ion-radio-waves padding-right-5 positive"></i>{{article.author}}
-                    </div>
-                    <div class="col" style="font-size: 1.1em"><i class="icon ion-clock padding-right-5 positive"></i>{{article.pubDate
+                    <!--<div class="col bold italic"><i class="icon ion-radio-waves padding-right-5 positive"></i>{{article.author}}
+                    </div>-->
+                    <div class="col" style="font-size: 1.1em"><i class="icon ion-clock padding-right-5 positive"></i>{{article.timestamp
                         | date:'MMM dd, yyyy'}}
                     </div>
                 </div>

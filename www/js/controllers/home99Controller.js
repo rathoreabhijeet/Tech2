@@ -353,9 +353,9 @@ angular.module('starter')
             }
         }
 
-        $scope.goToRssSingle = function (name, title) {
+        $scope.goToRssSingle = function (cat, index) {
             // console.log(title);
-            $state.go('app.RSSsingle', { name: name, title: title });
+            $state.go('app.RssNewSingle', { cat: cat, index: index });
         }
 
         function refreshRSS() {

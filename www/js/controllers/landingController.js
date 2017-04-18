@@ -69,7 +69,7 @@ angular.module('starter')
                     NewRss.getAllFeeds(function (data) {
                         console.log(data);
                         _.each(data.data, function (feed) {
-                            feed.feeds =[];
+                            feed.articles =[];
                             RSS.data.push(feed);
                             $localForage.setItem('rssData', data.data);
                         });

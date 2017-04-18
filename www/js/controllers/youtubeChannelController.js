@@ -113,22 +113,6 @@ angular.module('starter')
             fetchVideos();
         };
 
-        function checkRefresh() {
-            var index = _.findIndex($rootScope.RSSarray, function (n) {
-                return n.articlename == $stateParams.title;
-            })
-
-            if (index == -1) {
-                $ionicHistory.backView().stateParams = { trigger: false };
-                $ionicHistory.goBack();
-            }
-            else {
-                RSS.feeds[$scope.feedIndex].feed.length = 0;
-                init(RSS.data[$scope.feedIndex].title, RSS.data[$scope.feedIndex].name);
-            }
-        }
-
-
         $scope.fetchVideoData = function () {
             // YoutubeFeeds.data = [];
 

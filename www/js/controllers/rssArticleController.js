@@ -7,8 +7,8 @@ angular.module('starter')
         var article = parseInt($stateParams.index);
         var feed = parseInt($stateParams.parent);
 
-        $scope.name = RSS.data[$stateParams.parent].name;
-        $scope.totalArticles = RSS.feeds[feed].feed.length;
+        $scope.name = RSS.data[$stateParams.parent].category_title;
+        $scope.totalArticles = RSS.data[feed].articles.length;
         $scope.currentArticle = article+1;
         // var link = $stateParams.link;
 
@@ -20,7 +20,7 @@ angular.module('starter')
             // console.log(RSS);
             // console.log(typeof feedIndex, feedIndex);
             // console.log(typeof articleIndex, articleIndex);
-            $scope.article = RSS.feeds[feedIndex].feed[articleIndex];
+            $scope.article = RSS.data[feedIndex].articles[articleIndex];
 
             var loopRemoveDuplicateImage = true;
 
@@ -56,7 +56,7 @@ angular.module('starter')
         }
 
         $scope.goToNextArticle=function(){
-            if(article<RSS.feeds[feed].feed.length-1) {
+            if(article<RSS.data[feed].articles.length-1) {
                 article = article + 1;
                 fetchArticle(feed, article);
                 $scope.currentArticle = $scope.currentArticle +1;

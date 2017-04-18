@@ -305,14 +305,15 @@ angular.module('starter')
                 }
             })
 
-            .state('app.RssSingleNew', {
-                url: '/RssSingleNew/:name/:title',
+            .state('app.RssNewSingle', {
+                url: '/RssNewSingle/:index',
                 views: {
                     'menuContent': {
-                        templateUrl: 'templates/appView/RssSingleNew.html',
+                        templateUrl: 'templates/appView/RssNewSingle.html',
                         controller: "RssNewSingleCtrl"
                     }
-                }
+                },
+                params:{cat:{}}
             })
 
             .state('app.youtubeRss', {

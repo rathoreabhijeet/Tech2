@@ -69,6 +69,12 @@ angular.module('starter.services', [])
                     withCredentials: false
                 }).success(callback)
                 .error(err);
+            },
+            getSingleFeed: function (id, callback, err) {
+                return $http.get(YoutubeRssHome + '/getRSSFeeds?feedID='+id, {
+                    withCredentials: false
+                }).success(callback)
+                .error(err);
             }
          }
     })
