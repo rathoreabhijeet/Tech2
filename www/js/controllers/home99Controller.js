@@ -5,7 +5,7 @@ angular.module('starter')
     .controller('Home99Ctrl', function ($scope, $window, $location, MyServices, $ionicLoading, $timeout,
         $sce, $ionicSlideBoxDelegate, HomePage5Info, RSS, $rootScope, $q,
         $http, $state, Banner, HeaderLogo, Footer, $localForage, Config,
-        $stateParams, $cordovaToast, MenuData, ArticlesInfo) {
+        $stateParams, $cordovaToast, MenuData, ArticlesInfo, NewRss) {
 
         // ------------------------------ I N I T I A L I Z E -----------------------------
 
@@ -33,8 +33,7 @@ angular.module('starter')
 
         var promises = [];
         $scope.RSS = RSS.data;
-        $scope.categories = RSS.categories;
-        var categories = [];
+        console.log($scope.RSS);
 
         // ------------------------------ D I R E C T  A P I  C A L L S -----------------------------
 
@@ -125,7 +124,7 @@ angular.module('starter')
         //RSS DATA
         function loadRSS() {
             //RSS data stored in service and fetched only if service is empty
-            $scope.RSSLoading = true;
+            $ionicLoading.show();
             if (RSS.data.length == 0) {
                 // console.log('RSS service empty');
                 $scope.RSS.length = 0;
@@ -135,7 +134,7 @@ angular.module('starter')
                         _.each(forageData, function (n) {
                             $scope.RSS.push(n);
                         });
-                        $scope.RSSLoading = false;
+                        $ionicLoading.hide();
                     }
                     else {
                         console.log('from loadrss');
@@ -147,6 +146,7 @@ angular.module('starter')
                 $ionicLoading.hide();
                 $scope.RSSLoading = false;
                 console.log('RSS service filled');
+                console.log(RSS.data);
             }
         }
 
@@ -240,96 +240,7 @@ angular.module('starter')
             });
         }
 
-        function sortRssLinks(data) {
-            $scope.menudata.length = 0;
-
-            // console.log(data);
-            _.each(data.menu, function (n, index) {
-                if (n.linktypelink != "setting" && n.linktypelink != "contact" && n.linktypelink != "profile") {
-                    var newmenu = {};
-                    newmenu.id = n.id;
-                    newmenu.name = n.name;
-
-                    newmenu.order = n.order;
-                    newmenu.icon = n.icon;
-                    newmenu.link_type = n.linktypename;
-                    newmenu.articlename = n.articlename;
-                    switch (n.linktype) {
-                        case '3':
-                            newmenu.typeid = n.event;
-                            break;
-                        case '6':
-                            newmenu.typeid = n.gallery;
-                            break;
-                        case '8':
-                            newmenu.typeid = n.video;
-                            break;
-                        case '10':
-                            newmenu.typeid = n.blog;
-                            break;
-                        case '2':
-                            newmenu.typeid = n.article;
-                            break;
-                        default:
-                            newmenu.typeid = 0;
-                    }
-                    newmenu.link = n.linktypelink;
-                    // $rootScope.homeName = 'Home';
-
-                    //If there is URL in page name, it means it contains RSS feed links
-                    if (newmenu.link == 'home') {
-                        var number;
-                        //Find index of # in item name, if it exists
-                        if (newmenu.name.indexOf('#') != -1) {
-                            number = newmenu.name.substring(newmenu.name.indexOf('#') + 1, newmenu.name.length);
-                            //Change Menu name to Home itself
-                            newmenu.name = newmenu.name.replace('#' + number, '');
-                        }
-                        //Change link to numbered homePage
-                        newmenu.link = 'home' + number;
-                        // console.log('redirection to home' + number);
-
-                        //Custom home name
-                        $rootScope.homeName = newmenu.name;
-                        $rootScope.homeLink = 'home' + number;
-                    }
-
-                    //If there is URL in page name, it means it contains RSS feed links
-                    if (n.linktypename == "Pages" && isURL(n.articlename)) {
-                        $rootScope.RSSarray.push(newmenu);
-                    }
-                    else if (n.name == "Return Policy") {
-                        $scope.returnPolicy = newmenu;
-                    }
-
-                    else {
-                        $timeout(function () {
-                            $scope.menudata.push(newmenu);
-                        }, 50);
-                    }
-                    // console.log($rootScope.RSSarray);
-                }
-            });
-            $timeout(function () {
-                console.log('menudata');
-                console.log($scope.menudata);
-                console.log('rssarray');
-                console.log($rootScope.RSSarray);
-                ArticlesInfo.data.length = 0;
-                _.each($scope.menudata, function (n) {
-                    if (n.link == 'article') {
-                        ArticlesInfo.data.push(n);
-                    }
-                })
-                console.log(ArticlesInfo.data);
-                $scope.contact = data.config[5];
-                $scope.menu = {};
-                $scope.menu.setting = false;
-
-            }, 500);
-            console.log('from sortlinks');
-            fetchRSSData();
-        }
+        
 
         function fetchConfigData() {
             MyServices.getallfrontmenu(function (data) {
@@ -338,58 +249,23 @@ angular.module('starter')
                 console.log(data);
                 $localForage.setItem('config', data);
 
-                sortRssLinks(data);
+                // sortRssLinks(data);
             }, function (err) {
                 $state.go('access.offline');
             })
         }
 
         function fetchRSSData() {
-            console.log('fetch rss data');
-            // console.log($rootScope.RSSarray);
-            //promises array of $http requests for all RSS links to fetch RSS details
-            _.each($rootScope.RSSarray, function (n) {
-                promises.push($http.get($rootScope.adminurl + 'getSingleArticles?id=' + n.typeid, { withCredentials: false }))
-            })
-            // console.log(promises);
-            // console.log($scope.RSS);
 
-            //Data from all promises then fetched together
-            $q.all(promises).then(function (data) {
+            NewRss.getAllFeeds(function (data) {
                 console.log(data);
-                _.each(data, function (RSS) {
-                    $scope.RSS.push(RSS.data);
-                    // console.log($scope.RSS);
+                _.each(data.data, function (feed) {
+                    $scope.RSS.push(feed);
+                    $localForage.setItem('rssData', data.data);
                 });
-                //Create RSS.feed property with empty array for full length
-                _.each($scope.RSS, function () {
-                    RSS.feeds.push({});
-                    // console.log('RSS', RSS);
-                })
-                _.each($scope.RSS, function (n, index) {
-                    console.log(n);
-                    n.name = $rootScope.RSSarray[index].name;
-                    n.typeid = $rootScope.RSSarray[index].typeid;
-                    var content = n.content.replace(/<[^>]*>/g, '');
-                    content = content.replace(' ', '').toLowerCase();
-                    content = content.replace('nbsp', '');
-                    content = content.replace(/[^a-zA-Z,]/g, "");
-                    n.categories = content.split(',');
-                    _.each(n.categories, function (category) {
-                        categories.push(category);
-                    })
-                });
-                var uniqArray = _.uniq(categories);
-                _.each(uniqArray, function (n) {
-                    $scope.categories.push(n);
-                })
-                $scope.categories.unshift('All');
-                // console.log($scope.RSS);
-                $localForage.setItem('rssData', $scope.RSS);
-                $localForage.getItem('rssData').then(function (data) {
-                    // console.log(data);
-                });
-                $scope.RSSLoading = false;
+                $ionicLoading.hide();
+            }, function (err) {
+                $state.go('access.offline')
             });
         }
 
@@ -485,11 +361,7 @@ angular.module('starter')
         function refreshRSS() {
             $localForage.setItem('rssData', null);
             $scope.RSS.length = 0;
-            $scope.categories.length = 0;
-            $rootScope.RSSarray = [];
-            promises = [];
-            categories = [];
-            fetchConfigData();
+            fetchRSSData();
         }
 
         $scope.refreshAllData = function () {
@@ -518,6 +390,7 @@ angular.module('starter')
 
         $scope.$on("$ionicView.enter", function (event, data) {
             init();
+            console.log('init')
         });
 
         if ($stateParams.trigger) {

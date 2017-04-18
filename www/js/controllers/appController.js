@@ -139,9 +139,9 @@ angular.module('starter')
                         }
 
                         //If there is URL in page name, it means it contains RSS feed links
-                        if (n.linktypename == "Pages" && isURL(n.articlename) && isUnique(n.articlename, $rootScope.RSSarray)) {
-                            $rootScope.RSSarray.push(newmenu);
-                        }
+                        // if (n.linktypename == "Pages" && isURL(n.articlename) && isUnique(n.articlename, $rootScope.RSSarray)) {
+                        //     $rootScope.RSSarray.push(newmenu);
+                        // }
                         else if (n.name == "Return Policy") {
 
                             $scope.returnPolicy = newmenu;
@@ -152,7 +152,7 @@ angular.module('starter')
                         }
                         // console.log(n)
                     }
-                    console.log(index);
+                    // console.log(index);
                 });
                 processData(data);
             });
@@ -160,74 +160,45 @@ angular.module('starter')
         };
 
         function processData(data) {
-            //Separating those articles whose title is url but not a RSS url
-            // Non RSS url are put back into the sidemenu list
-            var rssUrlPromises = [];
-            _.each($rootScope.RSSarray, function (item) {
-                var promise = $http.get(RSS2JSON + item.articlename, {
-                    withCredentials: false
-                })
-                rssUrlPromises.push(promise);
-            })
-            console.log('menudata');
-            console.log($scope.menudata);
-            $q.all(rssUrlPromises).then(function (promises) {
-                console.log(promises);
-                var indices = [];
-                _.each(promises, function (item, index) {
-                    if (item.data.status == 'error') {
-                        console.log('error');
-                        console.log($rootScope.RSSarray[index]);
-                        $scope.menudata.push($rootScope.RSSarray[index])
-                        indices.push(index);
-                    }
-                })
-                _.each(indices, function (index) {
-                    $rootScope.RSSarray.splice(index, 1);
-                })
-                console.log($rootScope.RSSarray);
-
-
-                console.log('menudata');
-                console.log($scope.menudata);
-                console.log('rssarray');
-                console.log($rootScope.RSSarray);
-                _.each($scope.menudata, function (n) {
-                    if (n.link == 'article') {
-                        ArticlesInfo.data.push(n);
-                    }
-                })
-                console.log(ArticlesInfo.data);
-                $scope.contact = data.config[5];
-                $scope.menu = {};
-                $scope.menu.setting = false;
-                var blogdata1 = JSON.parse(data.config[0].text);
-
-                // config data
-                var blogdata = JSON.parse(data.config[1].text);
-                for (var i = 0; i < blogdata.length; i++) {
-                    if (blogdata[i].value == true) {
-                        $scope.menudata.blogs = true;
-                        $.jStorage.set("blogType", blogdata[i]);
-                        break;
-                    } else {
-                        $scope.menudata.blogs = false;
-                    }
+            // console.log('menudata');
+            // console.log($scope.menudata);
+            // console.log('rssarray');
+            // console.log($rootScope.RSSarray);
+            _.each($scope.menudata, function (n) {
+                if (n.link == 'article') {
+                    ArticlesInfo.data.push(n);
                 }
-                _.each(blogdata1, function (n) {
-                    if (n.value == true) {
-                        loginstatus = true;
-                    }
-                });
+            })
+            // console.log(ArticlesInfo.data);
+            $scope.contact = data.config[5];
+            $scope.menu = {};
+            $scope.menu.setting = false;
+            var blogdata1 = JSON.parse(data.config[0].text);
 
-                $scope.logso = "";
-                if (loginstatus == false) {
-                    $scope.menu.setting = false;
+            // config data
+            var blogdata = JSON.parse(data.config[1].text);
+            for (var i = 0; i < blogdata.length; i++) {
+                if (blogdata[i].value == true) {
+                    $scope.menudata.blogs = true;
+                    $.jStorage.set("blogType", blogdata[i]);
+                    break;
                 } else {
-                    $scope.menu.setting = true;
-                    $scope.logso = "has-menu-photo";
+                    $scope.menudata.blogs = false;
                 }
-            })
+            }
+            _.each(blogdata1, function (n) {
+                if (n.value == true) {
+                    loginstatus = true;
+                }
+            });
+
+            $scope.logso = "";
+            if (loginstatus == false) {
+                $scope.menu.setting = false;
+            } else {
+                $scope.menu.setting = true;
+                $scope.logso = "has-menu-photo";
+            }
         }
 
         // ------------------------------ S C O P E  F U N C T I O N S -----------------------------

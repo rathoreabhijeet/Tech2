@@ -1,7 +1,7 @@
 var reloadpage = false;
 var configreload = {};
 angular.module('starter')
-    .controller('landingCtrl', function ($state, $timeout, $localForage, $rootScope, MyServices, Config) {
+    .controller('landingCtrl', function ($state, $timeout, $localForage, $rootScope, MyServices, Config, NewRss, RSS) {
 
         var checkFirstLoad = function () {
             $localForage.getItem('firstLoad').then(function (data) {
@@ -55,11 +55,34 @@ angular.module('starter')
 
         }
 
+        function fetchRssData() {
+
+            $localForage.getItem('rssData').then(function (foragedata) {
+                if (foragedata) {
+                    console.log(foragedata)
+                    _.each(foragedata, function (feed) {
+                        RSS.data.push(feed);
+                    });
+                    checkHomeScreen();
+                }
+                else {
+                    NewRss.getAllFeeds(function (data) {
+                        console.log(data);
+                        _.each(data.data, function (feed) {
+                            RSS.data.push(feed);
+                            $localForage.setItem('rssData', data.data);
+                        });
+                        checkHomeScreen();
+                    }, function (err) {
+                        $state.go('access.offline')
+                    })
+                }
+            })
+        }
+
         function getConfigData() {
             $timeout(function () {
-                if (window.cordova) {
-                    navigator.splashscreen.hide();
-                }
+
             }, 500);
             $timeout(function () {
 
@@ -68,7 +91,8 @@ angular.module('starter')
                         MyServices.setconfigdata(foragedata);
                         Config.data = foragedata;
                         configreload.func();
-                        checkHomeScreen();
+                        // checkHomeScreen();
+                        fetchRssData();
                     }
                     else {
                         MyServices.getallfrontmenu(function (data) {
@@ -78,7 +102,8 @@ angular.module('starter')
                             console.log(data);
                             $localForage.setItem('config', data);
                             console.log('landing page');
-                            checkHomeScreen();
+                            // checkHomeScreen();
+                            fetchRssData();
                         }, function (err) {
                             $state.go('access.offline')
                         })
