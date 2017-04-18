@@ -1,0 +1,92 @@
+<ion-view hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-and-drawer-toggle>
+        </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-loop" ng-click="refreshAllData()">
+        </button>
+    </ion-nav-buttons>
+    <ion-nav-title>
+        <h1 cache-src="{{headerLogo}}" src-is="background" background-loading-style=" no-repeat center" class="title company-logo article-header-logo"></h1>
+
+    </ion-nav-title>
+
+    <ion-content class="has-header dark-bg">
+
+        <!--the main slider, linked to inner pages-->
+        <div ng-style="sliderheight" ng-if="!slider1Loading">
+            <ks-swiper-container swiper="swiper" initial-slide="0" loop="false" show-nav-buttons="false" slides-per-view="1" space-between="1"
+                pagination-is-active="true" pagination-clickable="true" autoplay="4000" autoplayDisableOnInteraction="false">
+                <ks-swiper-slide class="swiper-slide" ng-repeat="slide in slides.menu track by $index">
+                    <div cache-src="{{slide.image | serverimage}}" src-is="background" background-loading-style=" no-repeat center" ng-style="sliderheight"
+                        ui-sref="app.{{slide.linktypelink}}({id:slide.typeid,name:slide.name,articleName:menu.articlename})"
+                        class="text-center slider-bg lightgray-bg">
+                    </div>
+                </ks-swiper-slide>
+            </ks-swiper-container>
+        </div>
+        <ion-spinner icon="ios" class="valign-child spinner-light spinner-center text-center" ng-if="slider1Loading"></ion-spinner>
+
+        <!--optional promo banner-->
+        <div ng-if="!slider2Loading" style="min-height: 50px">
+            <ks-swiper-container swiper="swiper" initial-slide="0" loop="false" show-nav-buttons="false" slides-per-view="1" space-between="1"
+                pagination-clickable="false" autoplay="4000" autoplayDisableOnInteraction="false">
+                <ks-swiper-slide class="swiper-slide" ng-repeat="banner in banners">
+                    <div class="text-center slider2-bg">
+                        <img cache-src="{{banner.image| serverimage}}" alt="" circle-container-style="display:none;" class="full-image banner-slide block"
+                            ui-sref="app.{{banner.linktypelink}}({id:banner.typeid,name:banner.name,articleName:menu.articlename})">
+                    </div>
+                </ks-swiper-slide>
+            </ks-swiper-container>
+        </div>
+        <ion-spinner icon="ios" class="valign-child spinner-light spinner-center text-center" ng-if="slider2Loading"></ion-spinner>
+
+        <!--RSS Feeds-->
+
+        <div class="row row-wrap row-no-padding category-items" ng-if="!RSSLoading">
+            <div class="col col-50 margin-0 no-border">
+                <div class="row row-no-padding margin-0" ng-repeat="cat in RSS" ng-if="$index%2==0">
+                    <div class="col">
+                        <div class="item-image new-loader" ng-style="RSSCat" ng-click="goToRssSingle(cat.name,cat.title)">
+                            <img class="full-image" alt="" cache-src="{{cat.image|serverimage}}" circle-container-style="display:none">
+                            <!--<h3 class="RSS-category">{{cat.name}}</h3>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-50 margin-0 no-border">
+                <div class="row row-no-padding margin-0" ng-repeat="cat in RSS" ng-if="$index%2!=0">
+                    <div class="col">
+                        <div class="item-image new-loader" ng-style="RSSCat" ng-click="goToRssSingle(cat.name, cat.title)">
+                            <img class="full-image" alt="" cache-src="{{cat.image|serverimage}}" circle-container-style="display:none">
+                            <!--<h3 class="RSS-category">{{cat.name}}</h3>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-style="visibleRSS" class="valign-parent" ng-if="RSSLoading">
+            <ion-spinner icon="ios" class="valign-child spinner-light spinner-center text-center"></ion-spinner>
+        </div>
+    </ion-content>
+
+
+    <ion-footer-bar class="margin-0 padding-0 footer-menu">
+        <ion-scroll zooming="true" direction="x" scrollbar-x="false" class="categories-filter">
+            <span class="footer-col" ng-repeat="links in footerLinks" ng-click="footerLink(links)">
+                <div class="row row-no-padding padding-top-5">
+                    <div class="col ">
+                        <i class="icon" ng-class="links.icon"></i>
+                    </div>
+                </div>
+                <div class="row row-no-padding padding-top-5">
+                    <div class="col ">
+                        {{links.name}}
+                    </div>
+                </div>
+            </span>
+        </ion-scroll>
+    </ion-footer-bar>
+
+</ion-view>
