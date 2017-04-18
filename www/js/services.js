@@ -46,6 +46,19 @@ angular.module('starter.services', [])
                 return rssArray;
         }
     })
+    .factory('YoutubeRss', function ($http, YoutubeRssHome) {
+         return {
+            getAllFeeds: function ( callback, err) {
+                return $http.get(YoutubeRssHome + '/getYouTubeFeeds', {
+                    withCredentials: false
+                }).success(callback)
+                .error(err);
+            }
+         }
+    })
+    .factory('YoutubeFeeds',function () {
+        return { data: [] };
+    })
     .factory('MyServices', function ($http, $filter, $q, RSS2JSON) {
         return {
             all: function () {

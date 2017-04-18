@@ -138,7 +138,8 @@ angular.module('starter', ['ionic.contrib.drawer', 'ionic', 'ngCordova', 'ionic-
         })
 
     })
-    .constant('RSS2JSON','http://rss2json.com/api.json?rss_url=');
+    .constant('RSS2JSON','http://rss2json.com/api.json?rss_url=')
+    .constant('YoutubeRssHome','http://power4.simpl.life/index.php/json');
 
 
 

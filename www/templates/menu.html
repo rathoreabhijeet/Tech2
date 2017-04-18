@@ -52,6 +52,11 @@
                               ui-sref-active="bordered">
                         <i class="icon ln-arrow-right2"></i>App Tour
                     </ion-item>
+                    <ion-item nav-clear menu-and-drawer-close class="item item-icon-left font-18"
+                              ng-click="closeDrawer()" ui-sref="app.youtubeRss"
+                              ui-sref-active="bordered">
+                        <i class="icon ln-arrow-right2"></i>Video Channels
+                    </ion-item>
                     <ion-item nav-clear menu-and-drawer-close class="item item-icon-left font-18 item-sidemenu"
                               ng-click="openPage(menu);closeDrawer()" ng-repeat="menu in menudata|orderBy:'order'">
                         <i class="icon {{menu.icon}}"></i>{{menu.name}}

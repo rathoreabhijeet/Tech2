@@ -305,6 +305,25 @@ angular.module('starter')
                 }
             })
 
+            .state('app.youtubeRss', {
+                url: '/youtubeRss',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/appView/youtubeRss.html',
+                        controller: "youtubeRssCtrl"
+                    }
+                }
+            })
+            .state('app.youtubeChannel', {
+                url: '/youtubeChannel',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/appView/youtubeChannel.html',
+                        controller: "youtubeChannelCtrl"
+                    }
+                }
+            })
+
             .state('app.RSSsingleNew', {
                 url: '/RSSsingleNew/:name/:title',
                 views: {
