@@ -53,6 +53,22 @@ angular.module('starter.services', [])
                     withCredentials: false
                 }).success(callback)
                 .error(err);
+            },
+            getSingleFeed: function (id, callback, err) {
+                return $http.get(YoutubeRssHome + '/getYouTubeFeeds?channelID='+id, {
+                    withCredentials: false
+                }).success(callback)
+                .error(err);
+            }
+         }
+    })
+    .factory('NewRss', function ($http, YoutubeRssHome) {
+         return {
+            getAllFeeds: function ( callback, err) {
+                return $http.get(YoutubeRssHome + '/getRSSFeeds', {
+                    withCredentials: false
+                }).success(callback)
+                .error(err);
             }
          }
     })

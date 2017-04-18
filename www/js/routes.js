@@ -295,12 +295,22 @@ angular.module('starter')
                 }
             })
 
-            .state('app.RSSNew', {
-                url: '/RSSNew',
+            .state('app.RssNew', {
+                url: '/RssNew',
                 views: {
                     'menuContent': {
-                        templateUrl: 'templates/appView/RSSNew.html',
-                        controller: "RSSNewCtrl"
+                        templateUrl: 'templates/appView/RssNew.html',
+                        controller: "RssNewCtrl"
+                    }
+                }
+            })
+
+            .state('app.RssSingleNew', {
+                url: '/RssSingleNew/:name/:title',
+                views: {
+                    'menuContent': {
+                        templateUrl: 'templates/appView/RssSingleNew.html',
+                        controller: "RssNewSingleCtrl"
                     }
                 }
             })
@@ -315,24 +325,17 @@ angular.module('starter')
                 }
             })
             .state('app.youtubeChannel', {
-                url: '/youtubeChannel/:channel/:index',
+                url: '/youtubeChannel/:index',
                 views: {
                     'menuContent': {
                         templateUrl: 'templates/appView/youtubeChannel.html',
                         controller: "youtubeChannelCtrl"
                     }
-                }
+                },
+                params: {channel:{}}
             })
 
-            .state('app.RSSsingleNew', {
-                url: '/RSSsingleNew/:name/:title',
-                views: {
-                    'menuContent': {
-                        templateUrl: 'templates/appView/RSSsingleNew.html',
-                        controller: "RSSsingleNewCtrl"
-                    }
-                }
-            })
+            
 
             .state('app.RSS', {
                 url: '/RSS',

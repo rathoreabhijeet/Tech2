@@ -1,0 +1,58 @@
+<ion-view hide-back-button="true">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-and-drawer-toggle>
+        </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon button-clear ion-loop" ng-click="refreshAllRSS()">
+        </button>
+    </ion-nav-buttons>
+    <ion-nav-title>
+        <h1 cache-src="{{headerLogo}}"
+            src-is="background"
+            background-loading-style=" no-repeat center"
+            class="title company-logo article-header-logo"></h1>    </ion-nav-title>
+    
+    <ion-content class="has-header" overflow-scroll="true">
+        <ion-list>
+            <div class="row row-wrap row-no-padding category-items">
+                <ion-item class="col col-50 margin-0 no-border">
+                    <div class="row row-no-padding margin-0" ng-repeat="cat in RSS" ng-if="$index%2==0">
+                        <div class="col">
+                            <div class="item-image new-loader" ng-style="RSSCat" ng-click="goToRssSingle(cat.name,cat.title)">
+                                <img class="full-image" alt="" cache-src="{{cat.channel_image}}" circle-container-style="display:none">
+                                <!--<h3 class="RSS-category">{{cat.name}}</h3>-->
+                            </div>
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item class="col col-50 margin-0 no-border">
+                    <div class="row row-no-padding margin-0" ng-repeat="cat in RSS" ng-if="$index%2!=0">
+                        <div class="col">
+                            <div class="item-image new-loader" ng-style="RSSCat" ng-click="goToRssSingle(cat.name, cat.title)">
+                                <img class="full-image" alt="" cache-src="{{cat.channel_image}}" circle-container-style="display:none">
+                                <!--<h3 class="RSS-category">{{cat.name}}</h3>-->
+                            </div>
+                        </div>
+                    </div>
+                </ion-item>
+            </div>
+        </ion-list>
+    </ion-content>
+    <ion-footer-bar class="margin-0 padding-0 footer-menu">
+        <ion-scroll zooming="true" direction="x" scrollbar-x="false" class="categories-filter">
+			<span class="footer-col" ng-repeat="links in footerLinks" ng-click="footerLink(links)">
+                <div class="row row-no-padding padding-top-5" >
+                    <div class="col ">
+                        <i class="icon" ng-class="links.icon"></i>
+                    </div>
+                </div>
+                <div class="row row-no-padding padding-top-5" >
+                    <div class="col ">
+                        {{links.name}}
+                    </div>
+                </div>
+            </span>
+        </ion-scroll>
+    </ion-footer-bar>
+</ion-view>

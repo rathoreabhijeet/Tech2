@@ -16,8 +16,14 @@ angular.module('starter')
             YoutubeRss.getAllFeeds(function (data) {
                 console.log(data);
                 _.each(data.data, function (channel) {
+                    channel.feeds = [];
                     $scope.youtubeRss.push(channel);
-                })
+                });
+                // $localForage.setItem('youtubeRssData', $scope.youtubeRss);
+                // $localForage.getItem('youtubeRssData').then(function(data){
+                //     console.log(data);
+                //     $ionicLoading.hide();
+                // });
                 $ionicLoading.hide();
             }, function (err) {
                 $state.go('access.offline');
@@ -42,6 +48,7 @@ angular.module('starter')
         }
 
         $scope.goToRssSingle = function(channel,index){
+            console.log(channel);
             $state.go('app.youtubeChannel',{channel:channel,index:index})
         }
 
