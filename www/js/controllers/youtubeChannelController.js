@@ -4,7 +4,7 @@ angular.module('starter')
 
     .controller('youtubeChannelCtrl', function ($scope, $stateParams, MyServices, $ionicLoading, RSS, $state, $window,
         $ionicSlideBoxDelegate, $ionicHistory, $rootScope, $timeout, Config, $localForage,
-        $ionicScrollDelegate, YoutubeRss, YoutubeFeeds, $cordovaToast) {
+        $ionicScrollDelegate, YoutubeRss, YoutubeFeeds, $cordovaToast, $ionicModal) {
 
         // $scope.loading = true;
         var devH = $window.innerHeight;
@@ -13,7 +13,7 @@ angular.module('starter')
 
         var feedObject = {};
         var feedExists = false;
-        var feedIndex = parseInt($stateParams.index);
+        $scope.feedIndex = parseInt($stateParams.index);
         var prevFeedIndex = 0;
         var title;
         var name;
@@ -24,15 +24,15 @@ angular.module('starter')
         console.log($scope.channels);
 
         function fetchVideos() {
-            console.log(feedIndex);
-            $scope.title = YoutubeFeeds.data[feedIndex].channel_title;
+            console.log($scope.feedIndex);
+            $scope.title = YoutubeFeeds.data[$scope.feedIndex].channel_title;
 
-            // feedIndex = index;
-            $ionicSlideBoxDelegate.slide(feedIndex, 700);
+            // $scope.feedIndex = index;
+            $ionicSlideBoxDelegate.slide($scope.feedIndex, 700);
             console.log(YoutubeFeeds.data);
             //Check for data in service service 
-            if (YoutubeFeeds.data[feedIndex].feeds.length) {
-                $scope.channelVideos = YoutubeFeeds.data[feedIndex].feeds;
+            if (YoutubeFeeds.data[$scope.feedIndex].feeds.length) {
+                $scope.channelVideos = YoutubeFeeds.data[$scope.feedIndex].feeds;
                 $ionicLoading.hide();
             }
             else {
@@ -44,13 +44,13 @@ angular.module('starter')
         }
 
         $scope.goToRssArticle = function (index) {
-            $state.go('app.RSSarticle', { index: index, parent: feedIndex });
+            $state.go('app.RSSarticle', { index: index, parent: $scope.feedIndex });
         }
 
 
         $scope.goToNextRSS = function () {
-            if (feedIndex < $scope.channels.length - 1) {
-                feedIndex = feedIndex + 1;
+            if ($scope.feedIndex < $scope.channels.length - 1) {
+                $scope.feedIndex = $scope.feedIndex + 1;
                 fetchVideos();
             }
             else {
@@ -62,8 +62,8 @@ angular.module('starter')
         };
 
         $scope.goToPreviousRSS = function () {
-            if (feedIndex > 0) {
-                feedIndex = feedIndex - 1;
+            if ($scope.feedIndex > 0) {
+                $scope.feedIndex = $scope.feedIndex - 1;
                 fetchVideos();
             }
             else {
@@ -78,14 +78,14 @@ angular.module('starter')
         function checkLocalForageData() {
             $localForage.getItem('youtubeRssData').then(function (data) {
                 if (data != null) {
-                    if (data[feedIndex].feeds.length) {
-                        $scope.channelVideos = angular.copy(data[feedIndex].feeds);
-                        YoutubeFeeds.data[feedIndex].feeds = $scope.channelVideos;
+                    if (data[$scope.feedIndex].feeds.length) {
+                        $scope.channelVideos = angular.copy(data[$scope.feedIndex].feeds);
+                        YoutubeFeeds.data[$scope.feedIndex].feeds = $scope.channelVideos;
                         console.log(data);
                         console.log($scope.channelVideos);
-                        console.log(feedIndex);
+                        console.log($scope.feedIndex);
                         console.log(YoutubeFeeds.data);
-                        console.log(YoutubeFeeds.data[feedIndex].feeds);
+                        console.log(YoutubeFeeds.data[$scope.feedIndex].feeds);
                         $ionicLoading.hide();
                     }
                     else {
@@ -123,8 +123,8 @@ angular.module('starter')
                 $ionicHistory.goBack();
             }
             else {
-                RSS.feeds[feedIndex].feed.length = 0;
-                init(RSS.data[feedIndex].title, RSS.data[feedIndex].name);
+                RSS.feeds[$scope.feedIndex].feed.length = 0;
+                init(RSS.data[$scope.feedIndex].title, RSS.data[$scope.feedIndex].name);
             }
         }
 
@@ -132,12 +132,12 @@ angular.module('starter')
         $scope.fetchVideoData = function () {
             // YoutubeFeeds.data = [];
 
-            var index = YoutubeFeeds.data[feedIndex].channel_id;
+            var index = YoutubeFeeds.data[$scope.feedIndex].channel_id;
             console.log(index);
             YoutubeRss.getSingleFeed(parseInt(index), function (data) {
                 console.log(data);
                 $scope.channelVideos = angular.copy(data.data[0].videos);
-                YoutubeFeeds.data[feedIndex].feeds = $scope.channelVideos;
+                YoutubeFeeds.data[$scope.feedIndex].feeds = $scope.channelVideos;
                 $localForage.setItem('youtubeRssData', YoutubeFeeds.data);
                 $localForage.getItem('youtubeRssData').then(function (data) {
                     console.log(data);
@@ -148,5 +148,35 @@ angular.module('starter')
                 $state.go('access.offline');
             })
         }
+
+        var init = function () {
+            return $ionicModal.fromTemplateUrl('templates/appView/modal-video.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.modal = modal;
+
+            });
+        };
+
+
+        $scope.showVideo = function (url) {
+            init().then(function () {
+                $scope.modal.show();
+            });
+            $scope.video = {};
+            $scope.video.url = url + '?showinfo=0';
+            $scope.rotateVideo = {};
+            $scope.buttonRotate = {};
+            $scope.landscape = false;
+
+        };
+
+        $scope.closeVideo = function () {
+            $scope.modal.remove()
+                .then(function () {
+                    $scope.modal = null;
+                });
+        };
 
     })
